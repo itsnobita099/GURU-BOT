@@ -1,30 +1,27 @@
+let {Function,runtime} = require('../lib');
+/*
+Credit: SUHAID-BRO/hermit-md 
+ Function({
+pattern: 'autobio ?(.*)',
+fromMe: false
+*/
+let on_aano = false
+Function({on:"text",fromMe:false},async (m)=>{
+if (on_aano=== true || on_aano === null) return;
+if (m.message.toLowerCase() == "autobio off") {
+on_aano = null
+clearInterval(bioSetter)
+await m.send("_Autobio disabled. Remove plugin for completing removal process!_")
 
-let handler = m => m
-handler.all = async function (m) {
-	let setting = global.db.data.settings[this.user.jid]
-	
-  let bot = global.db.data.settings[this.user.jid] || {};
-  if (bot.autoBio) {
-    let _muptime
-    if (process.send) {
-      process.send('uptime')
-      _muptime = await new Promise(resolve => {
-        process.once('message', resolve)
-        setTimeout(resolve, 1000)
-      }) * 1000
-    }
-    let muptime = clockString(_muptime)
-		let bio = `\n🟢 Time Active ${muptime}\n\n ┃ 💎  By GURU`
-		await this.updateProfileStatus(bio).catch(_ => _)
-		setting.status = new Date() * 1
-  }
 }
-export default handler
+on_aano = true
+async function setAbout(){
+let status = "❬  ❍ "+new Date().toLocaleDateString()+" , ⛻ "+new Date().toLocaleTimeString('HI', { timeZone: 'Asia/Kolkata' }) + " ❭  𝐎ɴᴄᴇ 𝐔ᴘᴏɴ 𝐀 𝐓ɪᴍᴇ - 𝐈 𝐖ᴀs 𝐒ʜᴇᴇᴛ & 𝐈ɴɴᴏᴄᴇɴᴛ & 𝐓ʜᴀɴ 𝐒ʜɪᴛ 𝐇ᴀᴘᴘᴇɴᴅ !! ❤‍🩹 𝐂𝐫𝐞𝐚𝐭𝐞𝐝 𝐁𝐲 𝚰𝚻𝐒 | 𝐍𝐎𝚩𝚰𝚻𝚫💖✅"
+await m.client.updateProfileStatus(status)
+return "Done"
+}
+m.jid = m.client.user.id
+await m.send("_Autobio On ✅_");
+let bioSetter = setInterval(setAbout,10000)
 
-function clockString(ms) {
-  let d = isNaN(ms) ? '--' : Math.floor(ms / 86400000)
-  let h = isNaN(ms) ? '--' : Math.floor(ms / 3600000) % 24
-  let m = isNaN(ms) ? '--' : Math.floor(ms / 60000) % 60
-  let s = isNaN(ms) ? '--' : Math.floor(ms / 1000) % 60
-  return [d, ' Day(s) ️', h, ' Hour(s) ', m, ' Minute(s)'].map(v => v.toString().padStart(2, 0)).join('')
-}
+})
